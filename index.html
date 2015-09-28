@@ -10,39 +10,39 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body ng-controller="wineCtrl">
   <div class="container">
     <div class="margin-top-20">
       <a href="#" data-toggle="modal" data-target="#add-wine-modal" class="btn btn-primary">Add a new Wine</a>
     </div>
-    <div class="row margin-top-20 wine-items">
+    <div class="row margin-top-20 wine-items" ng-repeat="wine in wines">
       <div class="col-sm-3">
-        <img ng-src="#" class="img-responsive" alt="wine bottle image">
+        <img ng-src="{{wine.picture}}" class="img-responsive" alt="wine bottle image">
       </div>
       <div class="col-md-9">
         <div class="margin-top-20">
-          <span class="bold">Name: </span><span class="item-info"></span>
+          <span class="bold">Name: </span><span class="item-info">{{wine.name}}</span>
         </div>
         <div>
-          <span class="bold">Year: </span><span class="item-info"></span>
+          <span class="bold">Year: </span><span class="item-info">{{wine.year}}</span>
         </div>
         <div>
-          <span class="bold">Grapes: </span><span class="item-info"></span>
+          <span class="bold">Grapes: </span><span class="item-info">{{wine.grapes}}</span>
         </div>
         <div>
-          <span class="bold">Country: </span><span class="item-info"></span>
+          <span class="bold">Country: </span><span class="item-info">{{wine.country}}</span>
         </div>
         <div>
-          <span class="bold">Grapes: </span><span class="item-info"></span>
+          <span class="bold">Grapes: </span><span class="item-info">{{wine.country}}</span>
         </div>
         <div>
-          <span class="bold">Region: </span><span class="item-info"></span>
+          <span class="bold">Region: </span><span class="item-info">{{wine.region}}</span>
         </div>
         <div>
-          <span class="bold">Price: </span><span class="item-info"></span>
+          <span class="bold">Price: </span><span class="item-info">{{wine.price}}</span>
         </div>
         <div>
-          <span class="bold">Description: </span><span class="item-info"></span>
+          <span class="bold">Description: </span><span class="item-info">{{wine.description}}</span>
         </div>
         <div class="margin-top-20">
           <a href="#" class="btn btn default">Edit Wine</a> 
