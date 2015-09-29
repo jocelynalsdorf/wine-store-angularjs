@@ -60,32 +60,36 @@
           <div class="modal-body">
             <div class="bold">Name</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.name"/>
             </div>
             <div class="bold margin-top-20">Year</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.year"/>
             </div>
             <div class="bold margin-top-20">Grapes</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.grapes"/>
             </div>
             <div class="bold margin-top-20">Region</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.region"/>
             </div>
             <div class="bold margin-top-20">Price</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.price"/>
             </div>
             <div class="bold margin-top-20">Image</div>
             <div class="margin-top-20">
-              <input type="text" class="form-control"/>
+              <input type="text" class="form-control" ng-model="wine.image"/>
             </div>
             <div class="bold margin-top-20">Description</div>
             <div class="margin-top-20">
-              <textarea class="form-control"></textarea>
+              <textarea class="form-control" ng-model="wine.description"></textarea>
             </div>
+            <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="saveWine()">Save Wine</button>
+      </div>
         </div>
       </div>
     </div>
