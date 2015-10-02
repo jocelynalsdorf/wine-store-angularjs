@@ -1,4 +1,4 @@
-var app = angular.module("wineApp", ["ngRoute"]);
+var app = angular.module("wineApp", ["ngRoute", "ngResource"]);
 
 app.config(["$routeProvider", function($routeProvider){
   $routeProvider
@@ -16,6 +16,7 @@ app.config(["$routeProvider", function($routeProvider){
 
 }]);
 
+//factory to use if server is not restful
 app.factory("WineRoutes", function($http, $routeParams){
   var factory = {};
 
@@ -42,48 +43,70 @@ app.factory("WineRoutes", function($http, $routeParams){
   return factory;
 });
 
-app.controller("wineCtrl", function($scope, $http, $routeParams, WineRoutes ){
+//factory for $resources to use if server is restful
+//
+app.factory("Wine", function($resource){
+  return $resource("http://daretodiscover.herokuapp.com/wines/:id", {
+    id: "@id"}, {
+      update: {
+        method: "PUT"
+      }
+  });
+});
+
+app.controller("wineCtrl", function($scope, $http, $routeParams, WineRoutes, Wine ){
   $scope.wineList = [];
   $scope.WineRoutes = WineRoutes;
 
+//gets wines on page load using $resource
+  Wine.query(function(wines){
+      $scope.wines = wines;
+    });
+//adds a new wine
   $scope.saveWine = function(){
+    Wine.save($scope.wine, function(){
+      location.reload();
+  });
 
 
-    WineRoutes.addWineRequest($scope.wine)
-        .then(function(){
-        $("#add-wine-modal").modal("hide");
-        location.reload();
-      });
+    // WineRoutes.addWineRequest($scope.wine)
+    //     .then(function(){
+    //     $("#add-wine-modal").modal("hide");
+    //     location.reload();
+    //   });
   }
-    WineRoutes.getWinesRequest()
-      .success(function(wines){
-        $scope.wines = wines;
-        
-      })
-      .error(function(){
-        alert("something went wrong");
-      })
+   
 
 });
 
-app.controller("editWineCtrl", function($scope, $http, $routeParams, WineRoutes){
+app.controller("editWineCtrl", function($scope, $http, $routeParams, WineRoutes, Wine, $location){
     
-    WineRoutes.getWineRequest($routeParams.id)
-      // .then(function(wine){
-      //   console.log(wine);
-      //   $scope.wine = wine.data;
-      // })
-      // if you use .then, the object comes back with more stuff so you need to add .data
-      .success(function(wine){
-        $scope.wine = wine;
+  Wine.get({id: $routeParams.id}, function(wine){
+    $scope.wine = wine;
+    console.log(wine);
+  });
+
+    //only use this if non-restful an not using $resources
+    // WineRoutes.getWineRequest($routeParams.id)
+    //   // .then(function(wine){
+    //   //   console.log(wine);
+    //   //   $scope.wine = wine.data;
+    //   // })
+    //   // if you use .then, the object comes back with more stuff so you need to add .data
+    //   .success(function(wine){
+    //     $scope.wine = wine;
         
-      })
+
 
       $scope.editWine = function(){
-        WineRoutes.editWineRequest($routeParams.id, $scope.wine)
-        .then(function(){
-       
-        alert("changed it");
-      });
+        Wine.update({id: $routeParams.id}, $scope.wine, function(){
+          $location.path("/wines");
+        });
+
       }
+      //   WineRoutes.editWineRequest($routeParams.id, $scope.wine)
+      //   .then(function(){
+      //   alert("changed it");
+      // });
+      
   });
