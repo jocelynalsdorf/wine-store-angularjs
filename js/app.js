@@ -1,4 +1,4 @@
-var app = angular.module("wineApp", ["ngRoute", "ngResource"]);
+var app = angular.module("wineApp", ["ngRoute", "ngResource", "ngAnimate"]);
 
 app.config(["$routeProvider", function($routeProvider){
   $routeProvider
@@ -16,13 +16,11 @@ app.config(["$routeProvider", function($routeProvider){
 
 }]);
 
-//factory to use if server is not restful
+//factory to use if server is not restful--they are all  refactored out of this app below
 app.factory("WineRoutes", function($http, $routeParams){
   var factory = {};
 
-
   //get request for all wines
-
   factory.getWinesRequest = function(){
     return $http.get("http://daretodiscover.herokuapp.com/wines")
   }
@@ -39,7 +37,6 @@ app.factory("WineRoutes", function($http, $routeParams){
   factory.editWineRequest = function(wineId, wineData) {
   return $http.put("http://daretodiscover.herokuapp.com/wines/" + wineId, wineData)
   }
-
   return factory;
 });
 
@@ -68,7 +65,7 @@ app.controller("wineCtrl", function($scope, $http, $routeParams, WineRoutes, Win
       location.reload();
   });
 
-
+//only use this route technique and factory if server setup is not REST/CRUD
     // WineRoutes.addWineRequest($scope.wine)
     //     .then(function(){
     //     $("#add-wine-modal").modal("hide");
@@ -76,7 +73,6 @@ app.controller("wineCtrl", function($scope, $http, $routeParams, WineRoutes, Win
     //   });
   }
    
-
 });
 
 app.controller("editWineCtrl", function($scope, $http, $routeParams, WineRoutes, Wine, $location){
@@ -97,13 +93,11 @@ app.controller("editWineCtrl", function($scope, $http, $routeParams, WineRoutes,
     //     $scope.wine = wine;
         
 
-
-      $scope.editWine = function(){
-        Wine.update({id: $routeParams.id}, $scope.wine, function(){
-          $location.path("/wines");
-        });
-
-      }
+    $scope.editWine = function(){
+      Wine.update({id: $routeParams.id}, $scope.wine, function(){
+        $location.path("/wines");
+      });
+    }
       //   WineRoutes.editWineRequest($routeParams.id, $scope.wine)
       //   .then(function(){
       //   alert("changed it");
