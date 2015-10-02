@@ -16,22 +16,46 @@ app.config(["$routeProvider", function($routeProvider){
 
 }]);
 
+app.factory("WineRoutes", function($http, $routeParams){
+  var factory = {};
 
 
-app.controller("wineCtrl", function($scope, $http, $routeParams){
+  //get request for all wines
+
+  factory.getWinesRequest = function(){
+    return $http.get("http://daretodiscover.herokuapp.com/wines")
+  }
+
+  //get request for specified wine
+  factory.getWineRequest = function(wineId){
+    return  $http.get("http://daretodiscover.herokuapp.com/wines/" + wineId)
+  }
+  //post request
+  factory.addWineRequest = function(wineData){
+    return $http.post("http://daretodiscover.herokuapp.com/wines", wineData)
+  }
+//put request 
+  factory.editWineRequest = function(wineId, wineData) {
+  return $http.put("http://daretodiscover.herokuapp.com/wines/" + wineId, wineData)
+  }
+
+  return factory;
+});
+
+app.controller("wineCtrl", function($scope, $http, $routeParams, WineRoutes ){
   $scope.wineList = [];
-
+  $scope.WineRoutes = WineRoutes;
 
   $scope.saveWine = function(){
 
-  console.log($scope.wine);
-     $http.post("http://daretodiscover.herokuapp.com/wines", $scope.wine)
+
+    WineRoutes.addWineRequest($scope.wine)
         .then(function(){
         $("#add-wine-modal").modal("hide");
         location.reload();
       });
   }
-    $http.get("http://daretodiscover.herokuapp.com/wines")
+    WineRoutes.getWinesRequest()
       .success(function(wines){
         $scope.wines = wines;
         
@@ -42,9 +66,9 @@ app.controller("wineCtrl", function($scope, $http, $routeParams){
 
 });
 
-app.controller("editWineCtrl", function($scope, $http, $routeParams){
+app.controller("editWineCtrl", function($scope, $http, $routeParams, WineRoutes){
     
-    $http.get("http://daretodiscover.herokuapp.com/wines/" + $routeParams.id)
+    WineRoutes.getWineRequest($routeParams.id)
       // .then(function(wine){
       //   console.log(wine);
       //   $scope.wine = wine.data;
@@ -54,4 +78,12 @@ app.controller("editWineCtrl", function($scope, $http, $routeParams){
         $scope.wine = wine;
         
       })
+
+      $scope.editWine = function(){
+        WineRoutes.editWineRequest($routeParams.id, $scope.wine)
+        .then(function(){
+       
+        alert("changed it");
+      });
+      }
   });
