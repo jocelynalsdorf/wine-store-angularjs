@@ -2,7 +2,11 @@
     <div class="margin-top-20">
       <a href="/wines" data-toggle="modal" data-target="#add-wine-modal" class="btn btn-primary">Add a new Wine</a>
     </div>
-    <div class="row margin-top-20 wine-items" ng-repeat="wine in wines">
+    <div>
+      <input type="text" class="form-control" ng-model="wineSearch"/>
+    </div>
+
+    <div class="animate spin-toggle row margin-top-20 wine-items" ng-repeat="wine in wines | filter:wineSearch">
       <div class="col-sm-3">
         <img ng-src="{{wine.picture}}" class="img-responsive" alt="wine bottle image">
       </div>
